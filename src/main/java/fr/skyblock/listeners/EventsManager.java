@@ -6,8 +6,8 @@ import org.bukkit.plugin.PluginManager;
 
 public class EventsManager implements Listener {
 
-    private Main main;
-    private PluginManager pm;
+    private final Main main;
+    private final PluginManager pm;
 
     public EventsManager(Main m){
         main = m;
