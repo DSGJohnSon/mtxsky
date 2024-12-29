@@ -5,6 +5,7 @@ import fr.skyblock.exceptions.NotEnoughMoneyException;
 import fr.skyblock.exceptions.ValParamException;
 import fr.skyblock.jobs.Chomeur;
 import fr.skyblock.jobs.IJob;
+import fr.skyblock.jobs.Mineur;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class User {
 
     private final UUID uuid;
-    private int death;
+    private int deaths;
     private double money;
     private int jobChangeTimes;
     private IJob job;
@@ -35,7 +36,7 @@ public class User {
         }
 
         uuid = player.getUniqueId();
-        death = 0;
+        deaths = 0;
         money = 0;
         jobChangeTimes = 0;
         job = new Chomeur(this);
@@ -50,11 +51,27 @@ public class User {
     }
 
     /**
+     * Retourne le joueur à partir de l'uuid
+     * @return Player joueur
+     */
+    public Player getPlayer(){
+        return Bukkit.getPlayer(uuid);
+    }
+
+    /**
+     * Retourne le métier du joueur
+     * @return IJob métier
+     */
+    public IJob getJob() {
+        return job;
+    }
+
+    /**
      * Retourne le nombre de mort du joueur
      * @return int nbr de mort
      */
-    public int getDeath() {
-        return death;
+    public int getDeaths() {
+        return deaths;
     }
 
     /**
@@ -75,11 +92,47 @@ public class User {
     }
 
     /**
+     * Met le nombre de morts à i
+     * @param i int morts
+     */
+    public void setDeaths(int i) {
+        deaths = i;
+    }
+
+    /**
+     * Met l'argent à d
+     * @param d double argent
+     */
+    public void setMoney(double d){
+        money = d;
+    }
+
+    /**
+     * Met le nmbr de chgmt de métier à i
+     * @param i int nbr chgmt métier
+     */
+    public void setJobChangeTimes(int i) {
+        jobChangeTimes = i;
+    }
+
+    /**
+     * Met le métier du joueur associé au nom du métier
+     * @param jobName nom du métier
+     */
+    public void setJob(String jobName) {
+        switch (jobName){
+            case "chomeur" -> job = new Chomeur(this);
+            case "mineur" -> job = new Mineur(this);
+            default -> throw new RuntimeException(getClass().getSimpleName() + " Métier non trouvé");
+        }
+    }
+
+    /**
      * Ajouter des morts au joueur
      * @param i morts
      */
     public void addDeath(final int i){
-        death += i;
+        deaths += i;
     }
 
     /**
@@ -103,27 +156,11 @@ public class User {
     }
 
     /**
-     * Retourne le métier du joueur
-     * @return IJob métier
-     */
-    public IJob getJob() {
-        return job;
-    }
-
-    /**
      * Change le métier du joueur
      * @param ijob métier
      */
     public void changeJob(IJob ijob) {
         job = ijob;
         jobChangeTimes += 1;
-    }
-
-    /**
-     * Retourne le joueur à partir de l'uuid
-     * @return Player joueur
-     */
-    public Player getPlayer(){
-        return Bukkit.getPlayer(uuid);
     }
 }

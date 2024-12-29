@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class JoinQuit implements Listener {
 
-    private final static Main main = Main.getInstance();
+    private final Main main = Main.getInstance();
 
     /**
      * S'active quand un joueur rejoint le serveur
@@ -23,6 +23,7 @@ public class JoinQuit implements Listener {
         Player p = (Player) e.getPlayer();
 
         main.getUserManager().onLogin(p);
+        main.getUsersFile().readData(p);
     }
 
     /**
@@ -33,6 +34,7 @@ public class JoinQuit implements Listener {
     public void onQuit(PlayerQuitEvent e){
         Player p = (Player) e.getPlayer();
 
+        main.getUsersFile().writeData(p);
         main.getUserManager().delete(p);
     }
 }
