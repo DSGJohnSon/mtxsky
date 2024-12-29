@@ -2,6 +2,7 @@ package fr.skyblock;
 
 import fr.skyblock.jobs.menu.JobInv;
 import fr.skyblock.listeners.EventsManager;
+import fr.skyblock.users.UserCmd;
 import fr.skyblock.users.UserManager;
 import fr.skyblock.users.UsersFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,7 +34,8 @@ public class Main extends JavaPlugin {
         new EventsManager(this).listenEvents();
 
         // Enregistrement des commandes
-        Objects.requireNonNull(getCommand("job")).setExecutor(new JobInv());
+        getCommand("job").setExecutor(new JobInv());
+        getCommand("user").setExecutor(new UserCmd());
     }
 
     @Override
