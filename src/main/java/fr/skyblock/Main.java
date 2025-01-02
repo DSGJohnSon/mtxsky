@@ -2,17 +2,18 @@ package fr.skyblock;
 
 import fr.skyblock.jobs.menu.JobInv;
 import fr.skyblock.listeners.EventsManager;
+import fr.skyblock.scoreboard.SboreboardRunnable;
+import fr.skyblock.scoreboard.ScoreboardManager;
 import fr.skyblock.users.UserCmd;
 import fr.skyblock.users.UserManager;
 import fr.skyblock.users.UsersFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Objects;
-
 public class Main extends JavaPlugin {
 
     private static Main instance;
     private UserManager userManager;
+    private ScoreboardManager sbManager;
     private UsersFile usersFile;
     private String errorPrefix;
     private String prefix;
@@ -24,6 +25,7 @@ public class Main extends JavaPlugin {
 
         instance = this;
         userManager = new UserManager();
+        sbManager = new ScoreboardManager();
         usersFile = new UsersFile();
         usersFile.createFile();
 
@@ -36,6 +38,10 @@ public class Main extends JavaPlugin {
         // Enregistrement des commandes
         getCommand("job").setExecutor(new JobInv());
         getCommand("user").setExecutor(new UserCmd());
+
+        //Threads
+
+        new SboreboardRunnable().runTaskTimer(this, 0, 20);
     }
 
     @Override
@@ -61,5 +67,9 @@ public class Main extends JavaPlugin {
 
     public UsersFile getUsersFile() {
         return usersFile;
+    }
+
+    public ScoreboardManager getScoreboardbManager() {
+        return sbManager;
     }
 }

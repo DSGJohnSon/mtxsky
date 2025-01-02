@@ -1,5 +1,6 @@
 package fr.skyblock.listeners;
 
+import fr.mrmicky.fastboard.FastBoard;
 import fr.skyblock.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,8 @@ public class JoinQuit implements Listener {
 
         main.getUserManager().onLogin(p);
         main.getUsersFile().readData(p);
+
+        FastBoard board = new FastBoard(p);
     }
 
     /**
@@ -36,5 +39,11 @@ public class JoinQuit implements Listener {
 
         main.getUsersFile().writeData(p);
         main.getUserManager().delete(p);
+
+        FastBoard board = main.getScoreboardbManager().getBoards().remove(p.getUniqueId());
+
+        if (board != null) {
+            board.delete();
+        }
     }
 }

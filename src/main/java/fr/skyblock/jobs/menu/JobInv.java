@@ -3,7 +3,7 @@ package fr.skyblock.jobs.menu;
 import fr.skyblock.Main;
 import fr.skyblock.jobs.EJob;
 import fr.skyblock.jobs.JobManager;
-import fr.skyblock.jobs.Mineur;
+import fr.skyblock.jobs.types.Mineur;
 import fr.skyblock.users.User;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

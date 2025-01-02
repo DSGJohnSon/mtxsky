@@ -1,13 +1,15 @@
-package fr.skyblock.jobs;
+package fr.skyblock.jobs.types;
 
 import fr.skyblock.Main;
 import fr.skyblock.exceptions.ValParamException;
+import fr.skyblock.jobs.EJob;
+import fr.skyblock.jobs.IJob;
 import fr.skyblock.users.User;
 
 /**
  * Modélise les chomeurs
  */
-public class Chomeur implements IJob{
+public class Chomeur implements IJob {
 
     private final EJob eJob;
     private final User user;

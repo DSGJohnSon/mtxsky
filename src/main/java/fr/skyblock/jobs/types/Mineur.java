@@ -1,13 +1,15 @@
-package fr.skyblock.jobs;
+package fr.skyblock.jobs.types;
 
 import fr.skyblock.Main;
 import fr.skyblock.exceptions.ValParamException;
+import fr.skyblock.jobs.EJob;
+import fr.skyblock.jobs.IJob;
 import fr.skyblock.users.User;
 
 /**
  * Modélise le métier mineur
  */
-public class Mineur implements IJob{
+public class Mineur implements IJob {
 
     private final User user;
     private final EJob eJob;

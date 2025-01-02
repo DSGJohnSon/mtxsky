@@ -3,9 +3,9 @@ package fr.skyblock.users;
 import fr.skyblock.Main;
 import fr.skyblock.exceptions.NotEnoughMoneyException;
 import fr.skyblock.exceptions.ValParamException;
-import fr.skyblock.jobs.Chomeur;
+import fr.skyblock.jobs.types.Chomeur;
 import fr.skyblock.jobs.IJob;
-import fr.skyblock.jobs.Mineur;
+import fr.skyblock.jobs.types.Mineur;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
