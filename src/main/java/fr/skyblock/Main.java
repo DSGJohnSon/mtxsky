@@ -1,5 +1,6 @@
 package fr.skyblock;
 
+import fr.skyblock.files.SkyFile;
 import fr.skyblock.jobs.menu.JobInv;
 import fr.skyblock.listeners.EventsManager;
 import fr.skyblock.scoreboard.SboreboardRunnable;
@@ -7,6 +8,7 @@ import fr.skyblock.scoreboard.ScoreboardManager;
 import fr.skyblock.users.UserCmd;
 import fr.skyblock.users.UserManager;
 import fr.skyblock.users.UsersFile;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -15,8 +17,6 @@ public class Main extends JavaPlugin {
     private UserManager userManager;
     private ScoreboardManager sbManager;
     private UsersFile usersFile;
-    private String errorPrefix;
-    private String prefix;
 
     @Override
     public void onEnable() {
@@ -29,8 +29,9 @@ public class Main extends JavaPlugin {
         usersFile = new UsersFile();
         usersFile.createFile();
 
-        errorPrefix = "&7[&cErreur&7] ";
-        prefix = "&7[&bSkyBlock&7] ";
+        //Création des fichiers
+        SkyFile lang = SkyFile.LANG;
+        lang.create(getLogger());
 
         //Ecoute des événements
         new EventsManager(this).listenEvents();
@@ -40,12 +41,16 @@ public class Main extends JavaPlugin {
         getCommand("user").setExecutor(new UserCmd());
 
         //Threads
-
         new SboreboardRunnable().runTaskTimer(this, 0, 20);
     }
 
     @Override
     public void onDisable() {
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            usersFile.writeData(player);
+        });
+
         getLogger().info("Plugin Disable");
     }
 
@@ -57,14 +62,6 @@ public class Main extends JavaPlugin {
         return userManager;
     }
 
-    public String getErrorPrefix() {
-        return errorPrefix;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
     public UsersFile getUsersFile() {
         return usersFile;
     }
@@ -72,4 +69,19 @@ public class Main extends JavaPlugin {
     public ScoreboardManager getScoreboardbManager() {
         return sbManager;
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

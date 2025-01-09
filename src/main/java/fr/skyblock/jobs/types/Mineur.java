@@ -26,7 +26,7 @@ public class Mineur implements IJob {
             throw new ValParamException(getClass().getSimpleName() + " Param null");
         }
         user = u;
-        eJob = EJob.CHOMEUR;
+        eJob = EJob.MINEUR;
     }
 
     @Override

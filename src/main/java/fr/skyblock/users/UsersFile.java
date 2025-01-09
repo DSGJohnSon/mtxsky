@@ -4,6 +4,8 @@ import fr.skyblock.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.Objects;
 
 public class UsersFile {
 
+    private static final Logger log = LoggerFactory.getLogger(UsersFile.class);
     private File file;
     private FileConfiguration config;
 
@@ -27,14 +30,22 @@ public class UsersFile {
     }
 
     public void createFile(){
+
+        if(!main.getDataFolder().exists()){
+            main.getDataFolder().mkdir();
+        }
+
         file = new File(main.getDataFolder(), fileName);
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             main.saveResource(fileName, false);
         }
 
-        config = new YamlConfiguration();
-        YamlConfiguration.loadConfiguration(file);
+        config = YamlConfiguration.loadConfiguration(file);
     }
 
     public FileConfiguration getConfig() {
@@ -57,6 +68,7 @@ public class UsersFile {
         String uuid = player.getUniqueId().toString();
 
         if(config.get(uuid) == null){
+            main.getLogger().info("Je crée un compte pour " + player.getName());
             config.set(uuid + coinAccess, 0);
             config.set(uuid + deathAccess, 0);
             config.set(uuid + jobAccesss, "chomeur");
@@ -74,11 +86,8 @@ public class UsersFile {
             throw new RuntimeException(getClass().getSimpleName() + "Joueur inexistant");
         }
 
-        // Pas de compte dans le fichier
         String uuid = player.getUniqueId().toString();
-        if(config.get(uuid) == null){
-            createAccount(player);
-        }
+        createAccount(player);
 
         // Pas de compte dans le plugin
         if(main.getUserManager().getUser(player).isEmpty()){

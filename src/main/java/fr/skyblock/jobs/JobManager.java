@@ -1,6 +1,7 @@
 package fr.skyblock.jobs;
 
 import fr.skyblock.Main;
+import fr.skyblock.exceptions.JobAlreadyTakenException;
 import fr.skyblock.exceptions.NotEnoughMoneyException;
 import fr.skyblock.exceptions.ValParamException;
 import fr.skyblock.users.User;
@@ -25,11 +26,14 @@ public class JobManager {
         }
 
         Player p = user.getPlayer();
+
+        if(user.getJob().getEJob().equals(job.getEJob())){
+           throw new JobAlreadyTakenException();
+        }
+
         double price = getNewPrice(job.getEJob().getPrice(), user.getJobChangeTimes());
 
         if(user.getMoney() < price){
-            p.sendMessage(main.getErrorPrefix() + "&7 Tu n'as pas assez d'argent !");
-            main.getLogger().info(p.getName() + " a essayé de changer de métier mais n'a pas assez d'argent.");
             throw new NotEnoughMoneyException();
         }
 

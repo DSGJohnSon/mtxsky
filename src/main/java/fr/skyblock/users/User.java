@@ -131,8 +131,16 @@ public class User {
      * Ajouter des morts au joueur
      * @param i morts
      */
-    public void addDeath(final int i){
+    public void addDeaths(final int i){
         deaths += i;
+    }
+
+    /**
+     * Retire des morts au joueur
+     * @param i morts
+     */
+    public void removeDeaths(final int i){
+        deaths -= i;
     }
 
     /**
@@ -153,6 +161,22 @@ public class User {
         if(d <= 0) throw new ValParamException(getClass().getSimpleName() + " Param invalide");
         if((money - d) < 0) throw new NotEnoughMoneyException();
         money -= d;
+    }
+
+    /**
+     * Ajoute i au nbr de chgmt de métier
+     * @param i int
+     */
+    public void addJobChangeTimes(int i) {
+        jobChangeTimes += i;
+    }
+
+    /**
+     * Retire i au nbr de chgmt de métier
+     * @param i int
+     */
+    public void removeJobChangeTimes(int i) {
+        jobChangeTimes -= i;
     }
 
     /**

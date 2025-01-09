@@ -4,6 +4,9 @@ import fr.skyblock.Main;
 import fr.skyblock.jobs.types.Chomeur;
 import fr.skyblock.jobs.EJob;
 import fr.skyblock.jobs.types.Mineur;
+import fr.skyblock.lang.Lang;
+import fr.skyblock.lang.LangValue;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -79,17 +82,20 @@ public class UserManager {
     public void changeData(Player sender, String cmd, String target, String data, String value){
         if(!cmd.equals("set") &&
                 !cmd.equals("add") &&
-                !cmd.equals("remove")) {
+                !cmd.equals("remove") &&
+                !cmd.equals("stats")){
             showHelp(sender);
             return;
         }
 
         if(Bukkit.getPlayer(target) == null){
-            sender.sendMessage(Main.getInstance().getErrorPrefix() + "Le joueur §c" + target + " §7n'existe pas.");
+            sender.sendMessage(Lang.getErrorPrefix() + Lang.PLAYER_NOT_FOUND.get()
+                    .replace(LangValue.PLAYER.getName(), target));
             return;
         }
         if(getUser(Bukkit.getPlayer(target)).isEmpty()){
-            sender.sendMessage(Main.getInstance().getErrorPrefix() + "Le joueur §c" + target + " §7n'a pas de compte utilisateur.");
+            sender.sendMessage(Lang.getErrorPrefix() + Lang.ACCOUNT_NOT_FOUND.get()
+                    .replace(LangValue.PLAYER.getName(), target));
             return;
         }
 
@@ -106,11 +112,16 @@ public class UserManager {
         switch(data) {
             case "deaths":
                 try {
-                    user.setDeaths(Integer.parseInt(value));
-                    sender.sendMessage(Main.getInstance().getPrefix() + "Le nombre de morts de §b"
-                            + target
-                            + " §fest maintenant de §b"
-                            + value);
+                    if(cmd.equalsIgnoreCase("set")){
+                        user.setDeaths(Integer.parseInt(value));
+                    } else if (cmd.equalsIgnoreCase("add")){
+                        user.addDeaths(Integer.parseInt(value));
+                    } else if (cmd.equalsIgnoreCase("remove")){
+                        user.removeDeaths(Integer.parseInt(value));
+                    }
+                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_DEATHS.get()
+                            .replace(LangValue.PLAYER.getName(), target)
+                            .replace(LangValue.DEATHS.getName(), value)));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
@@ -118,11 +129,16 @@ public class UserManager {
 
             case "coins":
                 try {
-                    user.setMoney(Double.parseDouble(value));
-                    sender.sendMessage(Main.getInstance().getPrefix() + "L'argent de §b"
-                            + target
-                            + " §fest maintenant de §b"
-                            + value);
+                    if(cmd.equalsIgnoreCase("set")){
+                        user.setMoney(Integer.parseInt(value));
+                    } else if (cmd.equalsIgnoreCase("add")){
+                        user.addMoney(Integer.parseInt(value));
+                    } else if (cmd.equalsIgnoreCase("remove")){
+                        user.removeMoney(Integer.parseInt(value));
+                    }
+                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_DEATHS.get()
+                            .replace(LangValue.PLAYER.getName(), target)
+                            .replace(LangValue.COINS.getName(), value)));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
@@ -130,32 +146,42 @@ public class UserManager {
 
             case "jobChangedTimes":
                 try {
-                    user.setJobChangeTimes(Integer.parseInt(value));
-                    sender.sendMessage(Main.getInstance().getPrefix() + "Le nombre de fois que §b"
-                            + target + " §f a changé de métier est maintenant de §b" + value);
+                    if(cmd.equalsIgnoreCase("set")){
+                        user.setJobChangeTimes(Integer.parseInt(value));
+                    } else if (cmd.equalsIgnoreCase("add")){
+                        user.addJobChangeTimes(Integer.parseInt(value));
+                    } else if (cmd.equalsIgnoreCase("remove")){
+                        user.removeJobChangeTimes(Integer.parseInt(value));
+                    }
+                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_DEATHS.get()
+                            .replace(LangValue.PLAYER.getName(), target)
+                            .replace(LangValue.JOB_CHANGED_TIMES.getName(), value)));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
                 break;
 
             case "job":
+                if(!cmd.equalsIgnoreCase("set")){
+                    showHelp(sender);
+                    return;
+                }
+
                 if(data.equals(EJob.CHOMEUR.getName().toLowerCase())){
                     user.changeJob(new Chomeur(user));
                 } else if(data.equals(EJob.MINEUR.getName().toLowerCase())){
                     user.changeJob(new Mineur(user));
                 } else {
-                    sender.sendMessage(Main.getInstance().getErrorPrefix() + " Le métier §c"
-                            + data + "§f n'existe pas");
+                    sender.sendMessage(Lang.getErrorPrefix() + Lang.JOB_NOT_FOUND.get()
+                            .replace(LangValue.JOB.getName(), value));
                     return;
                 }
-                sender.sendMessage(Main.getInstance().getPrefix() + "Le métier de §b"
-                        + target
-                        + " §fest maintenant §b"
-                        + value);
+                sender.sendMessage(Lang.getPrefix() + Lang.CMD_USER_JOB.get()
+                        .replace(LangValue.PLAYER.getName(), target)
+                        .replace(LangValue.JOB.getName(), value));
                 break;
             default:
-                sender.sendMessage(Main.getInstance().getErrorPrefix() + "L'attribut "
-                        + data + " n'existe pas !");
+                showHelp(sender);
                 break;
         }
     }
@@ -165,11 +191,7 @@ public class UserManager {
      * @param p Player joueur
      */
     public void showHelp(Player p){
-        p.sendMessage("§7--------- §bUser §7----------");
-        p.sendMessage("§7/user set {user} {data} {value}");
-        p.sendMessage("§7/user add {user} {data} {value}");
-        p.sendMessage("§7/user remove {user} {data} {value}");
-        p.sendMessage("§7-------------------------");
+        p.sendMessage(Lang.CMD_USER_HELP.get());
     }
 
 }

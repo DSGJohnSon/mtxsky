@@ -1,9 +1,12 @@
 package fr.skyblock.jobs.menu;
 
 import fr.skyblock.Main;
+import fr.skyblock.exceptions.JobAlreadyTakenException;
+import fr.skyblock.exceptions.NotEnoughMoneyException;
 import fr.skyblock.jobs.EJob;
 import fr.skyblock.jobs.JobManager;
 import fr.skyblock.jobs.types.Mineur;
+import fr.skyblock.lang.Lang;
 import fr.skyblock.users.User;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -21,13 +24,24 @@ import org.jetbrains.annotations.NotNull;
 public class JobInv implements Listener, CommandExecutor {
 
     private final Inventory inv;
-    private final String invName = "&7Menu des métiers";
+    private final String invName = "§7Menu des métiers";
 
     private final static Main main = Main.getInstance();
 
     public JobInv(){
         inv = Bukkit.createInventory(null, 9, Component.text(invName));
-        inv.setItem(4, EJob.MINEUR.getItem());
+    }
+
+    public void setupInv(Player p){
+        User user;
+        double price;
+
+        if(p == null) return;
+        if(main.getUserManager().getUser(p).isEmpty()) return;
+        user = main.getUserManager().getUser(p).get();
+
+        price = JobManager.getNewPrice(EJob.MINEUR.getPrice(), user.getJobChangeTimes());
+        inv.setItem(4, EJob.MINEUR.getItem(price));
     }
 
     @Override
@@ -39,6 +53,7 @@ public class JobInv implements Listener, CommandExecutor {
 
         if(label.equalsIgnoreCase("job")){
             Player p = (Player) sender;
+            setupInv(p);
             p.openInventory(inv);
         }
 
@@ -63,7 +78,16 @@ public class JobInv implements Listener, CommandExecutor {
         p.closeInventory();
 
         if (current.getType() == EJob.MINEUR.getIcon().getType()){
-            JobManager.changeJob(user, new Mineur(user));
+            try {
+                JobManager.changeJob(user, new Mineur(user));
+            } catch (NotEnoughMoneyException exception){
+                p.sendMessage(Lang.getErrorPrefix() + "&7 Tu n'as pas assez d'argent !");
+                main.getLogger().info(p.getName() + " a essayé de changer de métier mais n'a pas assez d'argent.");
+                exception.getSuppressed();
+            } catch (JobAlreadyTakenException exception){
+                p.sendMessage(Lang.getErrorPrefix() + "&7 Tu as déjà ce métier !");
+                exception.getSuppressed();
+            }
         }
     }
 }

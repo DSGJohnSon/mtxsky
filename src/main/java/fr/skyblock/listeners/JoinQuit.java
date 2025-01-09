@@ -1,7 +1,10 @@
 package fr.skyblock.listeners;
 
-import fr.mrmicky.fastboard.FastBoard;
 import fr.skyblock.Main;
+import fr.skyblock.lang.Lang;
+import fr.skyblock.lang.LangValue;
+import fr.skyblock.scoreboard.fastboard.FastBoard;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,7 +29,10 @@ public class JoinQuit implements Listener {
         main.getUserManager().onLogin(p);
         main.getUsersFile().readData(p);
 
-        FastBoard board = new FastBoard(p);
+        main.getScoreboardbManager().addPlayerToBoard(p);
+
+        e.joinMessage(Component.text(Lang.PLAYER_JOIN.get()
+                .replace(LangValue.PLAYER.getName(), p.getName())));
     }
 
     /**

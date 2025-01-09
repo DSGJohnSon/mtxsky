@@ -1,0 +1,20 @@
+prefix: '&7[&fSky&bBlock&7]'
+error: '&7[&cErreur&7]'
+
+player-join: '&7[&a+&7]&f {player}'
+
+cmd-user-help: |-
+  &7--------- &bUser &7----------
+  &7/user set {user} {data} {value}
+  &7/user add {user} {data} {value}
+  &7/user remove {user} {data} {value}
+  &7/user stats {user} 
+  &7-------------------------
+cmd-user-deaths: 'Le nombre de morts de &e{player} &fest maintenant de &e{deaths}&f.'
+cmd-user-coins: '&e{player} &fa désormais &e{coins}&f€.'
+cmd-user-job-changed-times: 'Le nombre de fois que &e{player}&f a changé de métier est maitenent de &e{jobChangedTimes}&f.'
+cmd-user-job: 'Le métier de &e{player}&f est maitenant &e{job}&f.'
+
+job-not-found: "Le métier &e{job}&f n'existe pas."
+player-not-found: "Le joueur &e{player}&f n'existe pas."
+account-not-found: "Le joueur &e{player}&f n'a pas de compte."

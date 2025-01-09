@@ -1,7 +1,7 @@
 package fr.skyblock.scoreboard;
 
-import fr.mrmicky.fastboard.FastBoard;
 import fr.skyblock.Main;
+import fr.skyblock.scoreboard.fastboard.FastBoard;
 import fr.skyblock.users.User;
 import org.bukkit.entity.Player;
 

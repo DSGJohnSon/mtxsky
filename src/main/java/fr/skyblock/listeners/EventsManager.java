@@ -1,5 +1,6 @@
 package fr.skyblock.listeners;
 
+import fr.skyblock.jobs.menu.JobInv;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -27,6 +28,7 @@ public class EventsManager implements Listener {
      */
     public void listenEvents(){
         pm.registerEvents(new JoinQuit(), pl);
+        pm.registerEvents(new JobInv(), pl);
     }
 
 }
