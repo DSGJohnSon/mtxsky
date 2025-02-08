@@ -1,43 +1,20 @@
 package fr.skyblock.jobs.types;
 
 import fr.skyblock.Main;
-import fr.skyblock.exceptions.ValParamException;
-import fr.skyblock.jobs.EJob;
-import fr.skyblock.jobs.IJob;
-import fr.skyblock.users.User;
+import fr.skyblock.jobs.Job;
+import fr.skyblock.jobs.JobInfo;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Modélise les chomeurs
  */
-public class Chomeur implements IJob {
-
-    private final EJob eJob;
-    private final User user;
+public class Chomeur extends Job {
 
     private final static Main main = Main.getInstance();
 
-    /**
-     * Constructeur, renvoie une nouvelle instance de chomeur
-     * @param u utilisateur
-     */
-    public Chomeur(User u){
-        if(u == null){
-            main.getLogger().warning(getClass().getSimpleName() + " Param null");
-            throw new ValParamException(getClass().getSimpleName() + " Param null");
-        }
-
-        eJob = EJob.CHOMEUR;
-        user = u;
+    public Chomeur(){
+        super(JobInfo.CHOMEUR.getName(), JobInfo.CHOMEUR.getPrice(), JobInfo.CHOMEUR.getIcon());
     }
 
-    @Override
-    public void applyBonus() {
-        user.getPlayer().sendMessage("&cT'as pas de bonus le chomeur");
-    }
-
-    @Override
-    public EJob getEJob() {
-        return eJob;
-    }
 
 }

@@ -1,8 +1,10 @@
 package fr.skyblock.users;
 
 import fr.skyblock.Main;
+import fr.skyblock.exceptions.NotEnoughMoneyException;
+import fr.skyblock.exceptions.ValParamException;
+import fr.skyblock.jobs.JobInfo;
 import fr.skyblock.jobs.types.Chomeur;
-import fr.skyblock.jobs.EJob;
 import fr.skyblock.jobs.types.Mineur;
 import fr.skyblock.lang.Lang;
 import fr.skyblock.lang.LangValue;
@@ -71,6 +73,28 @@ public class UserManager {
         delete(player.getUniqueId());
     }
 
+    public void showStats(Player sender, String targetName){
+        User user;
+        if(Bukkit.getPlayer(targetName) == null){
+            sender.sendMessage(Lang.getErrorPrefix() + Lang.PLAYER_NOT_FOUND.get()
+                    .replace(LangValue.PLAYER.getName(), targetName));
+            return;
+        }
+        if(getUser(Bukkit.getPlayer(targetName)).isEmpty()) {
+            sender.sendMessage(Lang.getErrorPrefix() + Lang.ACCOUNT_NOT_FOUND.get()
+                    .replace(LangValue.PLAYER.getName(), targetName));
+            return;
+        }
+        user = getUser(Bukkit.getPlayer(targetName)).get();
+        sender.sendMessage(Lang.CMD_USER_STATS.get()
+                .replace(LangValue.PLAYER.getName(), targetName)
+                .replace(LangValue.JOB.getName(), user.getJob().getName())
+                .replace(LangValue.DEATHS.getName(), String.valueOf(user.getDeaths()))
+                .replace(LangValue.JOB_CHANGED_TIMES.getName(), String.valueOf(user.getJobChangeTimes()))
+                .replace(LangValue.COINS.getName(), String.valueOf(user.getMoney())));
+    }
+
+
     /**
      * Change la valeur d'un attribut associé à un uuid dans le fichier
      * @param sender Player executeur de la commande
@@ -121,7 +145,7 @@ public class UserManager {
                     }
                     sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_DEATHS.get()
                             .replace(LangValue.PLAYER.getName(), target)
-                            .replace(LangValue.DEATHS.getName(), value)));
+                            .replace(LangValue.DEATHS.getName(), Integer.toString(user.getDeaths()))));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
@@ -134,11 +158,20 @@ public class UserManager {
                     } else if (cmd.equalsIgnoreCase("add")){
                         user.addMoney(Integer.parseInt(value));
                     } else if (cmd.equalsIgnoreCase("remove")){
-                        user.removeMoney(Integer.parseInt(value));
+
+                        try{
+                            user.removeMoney(Integer.parseInt(value));
+                        } catch (NotEnoughMoneyException e){
+                            sender.sendMessage(Lang.getErrorPrefix() + Lang.CMD_USER_COINS_NOT_ENOUGH_MONEY.get()
+                                    .replace(LangValue.PLAYER.getName(), target));
+                        } catch (ValParamException e) {
+                            sender.sendMessage(Lang.getErrorPrefix() + Lang.CMD_USER_COINS_INVALID_PARAM.get());
+                        }
+
                     }
-                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_DEATHS.get()
+                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_COINS.get()
                             .replace(LangValue.PLAYER.getName(), target)
-                            .replace(LangValue.COINS.getName(), value)));
+                            .replace(LangValue.COINS.getName(), Double.toString(user.getMoney())));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
@@ -153,9 +186,9 @@ public class UserManager {
                     } else if (cmd.equalsIgnoreCase("remove")){
                         user.removeJobChangeTimes(Integer.parseInt(value));
                     }
-                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_DEATHS.get()
+                    sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_JOB_CHANGED_TIMES.get()
                             .replace(LangValue.PLAYER.getName(), target)
-                            .replace(LangValue.JOB_CHANGED_TIMES.getName(), value)));
+                            .replace(LangValue.JOB_CHANGED_TIMES.getName(), Integer.toString(user.getJobChangeTimes()))));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
@@ -167,10 +200,10 @@ public class UserManager {
                     return;
                 }
 
-                if(data.equals(EJob.CHOMEUR.getName().toLowerCase())){
-                    user.changeJob(new Chomeur(user));
-                } else if(data.equals(EJob.MINEUR.getName().toLowerCase())){
-                    user.changeJob(new Mineur(user));
+                if(data.equalsIgnoreCase(JobInfo.CHOMEUR.getName())){
+                    user.changeJob(new Chomeur());
+                } else if(data.equalsIgnoreCase(JobInfo.MINEUR.getName())){
+                    user.changeJob(new Mineur());
                 } else {
                     sender.sendMessage(Lang.getErrorPrefix() + Lang.JOB_NOT_FOUND.get()
                             .replace(LangValue.JOB.getName(), value));

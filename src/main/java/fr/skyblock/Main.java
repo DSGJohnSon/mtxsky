@@ -24,14 +24,17 @@ public class Main extends JavaPlugin {
         getLogger().info("Initialisation du plugin en cours ...");
 
         instance = this;
-        userManager = new UserManager();
-        sbManager = new ScoreboardManager();
-        usersFile = new UsersFile();
-        usersFile.createFile();
 
         //Création des fichiers
         SkyFile lang = SkyFile.LANG;
         lang.create(getLogger());
+
+        SkyFile user = SkyFile.USER;
+        user.create(getLogger());
+
+        userManager = new UserManager();
+        sbManager = new ScoreboardManager();
+        usersFile = new UsersFile();
 
         //Ecoute des événements
         new EventsManager(this).listenEvents();

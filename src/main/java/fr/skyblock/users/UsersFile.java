@@ -1,63 +1,30 @@
 package fr.skyblock.users;
 
 import fr.skyblock.Main;
+import fr.skyblock.files.SkyFile;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 public class UsersFile {
 
-    private static final Logger log = LoggerFactory.getLogger(UsersFile.class);
-    private File file;
-    private FileConfiguration config;
+    private final FileConfiguration config;
 
-    private final String fileName, coinAccess, deathAccess, jobAccesss, jobChangedTimesAccesss;
+    private final String coinAccess, deathAccess, jobAccesss, jobChangedTimesAccesss;
 
     private final Main main = Main.getInstance();
 
     public UsersFile(){
-        fileName = "users.yml";
         coinAccess = ".coins";
         deathAccess = ".deaths";
         jobAccesss = ".job";
         jobChangedTimesAccesss = ".jobChangedTimes";
-    }
-
-    public void createFile(){
-
-        if(!main.getDataFolder().exists()){
-            main.getDataFolder().mkdir();
-        }
-
-        file = new File(main.getDataFolder(), fileName);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            main.saveResource(fileName, false);
-        }
-
-        config = YamlConfiguration.loadConfiguration(file);
+        config = SkyFile.USER.getConfig();
     }
 
     public FileConfiguration getConfig() {
         return config;
-    }
-
-    public void save(){
-        try {
-            config.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void createAccount(Player player){
@@ -68,12 +35,12 @@ public class UsersFile {
         String uuid = player.getUniqueId().toString();
 
         if(config.get(uuid) == null){
-            main.getLogger().info("Je crée un compte pour " + player.getName());
+            main.getLogger().info("Création du compte de " + player.getName());
             config.set(uuid + coinAccess, 0);
             config.set(uuid + deathAccess, 0);
             config.set(uuid + jobAccesss, "chomeur");
             config.set(uuid + jobChangedTimesAccesss, 0);
-            save();
+            SkyFile.USER.save(config);
         }
     }
 
@@ -124,7 +91,7 @@ public class UsersFile {
         config.set(uuid + coinAccess, user.getMoney());
         config.set(uuid + deathAccess, user.getDeaths());
         config.set(uuid + jobChangedTimesAccesss, user.getJobChangeTimes());
-        config.set(uuid + jobAccesss, user.getJob().getEJob().getName().toLowerCase());
-        save();
+        config.set(uuid + jobAccesss, user.getJob().getName().toLowerCase());
+        SkyFile.USER.save(config);
     }
 }

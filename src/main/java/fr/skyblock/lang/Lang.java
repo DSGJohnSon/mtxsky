@@ -12,13 +12,19 @@ public enum Lang {
     ERROR,
     PLAYER_JOIN,
     CMD_USER_HELP,
+    CMD_USER_STATS,
     CMD_USER_DEATHS,
     CMD_USER_COINS,
+    CMD_USER_COINS_NOT_ENOUGH_MONEY,
+    CMD_USER_COINS_INVALID_PARAM,
     CMD_USER_JOB_CHANGED_TIMES,
     CMD_USER_JOB,
     JOB_NOT_FOUND,
     ACCOUNT_NOT_FOUND,
-    PLAYER_NOT_FOUND;
+    PLAYER_NOT_FOUND,
+    NOT_ENOUGH_MONEY,
+    JOB_ALREADY_TAKEN,
+    NEW_JOB;
 
     private static final Map<Lang, String> values = new HashMap<>();
 

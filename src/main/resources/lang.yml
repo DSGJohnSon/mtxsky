@@ -10,11 +10,24 @@ cmd-user-help: |-
   &7/user remove {user} {data} {value}
   &7/user stats {user} 
   &7-------------------------
+cmd-user-stats: |-
+  &7--------- &bStatistiques de {player} &7----------
+  &fMort(s) : &b{deaths}
+  &fArgent : &b{coins}
+  &fNombre de métier choisi(s) : &b{jobChangedTimes}
+  &fMétier actuel : &b{job}
+  &7-------------------------------------------------
 cmd-user-deaths: 'Le nombre de morts de &e{player} &fest maintenant de &e{deaths}&f.'
 cmd-user-coins: '&e{player} &fa désormais &e{coins}&f€.'
-cmd-user-job-changed-times: 'Le nombre de fois que &e{player}&f a changé de métier est maitenent de &e{jobChangedTimes}&f.'
+cmd-user-coins-not-enough-money: "&e{player} n'as pas assez d'argent."
+cmd-user-coins-invalid-param: "L'argent à retirer doit être un nombr positif."
+cmd-user-job-changed-times: '&e{player}&f a changé de métier &e{jobChangedTimes}&f fois.'
 cmd-user-job: 'Le métier de &e{player}&f est maitenant &e{job}&f.'
 
 job-not-found: "Le métier &e{job}&f n'existe pas."
 player-not-found: "Le joueur &e{player}&f n'existe pas."
 account-not-found: "Le joueur &e{player}&f n'a pas de compte."
+
+not-enough-money: "Tu n'as pas assez d'argent."
+job-already-taken: "Tu as déjà ce métier."
+new-job: "Votre nouveau métier est maintenant &e{job}"

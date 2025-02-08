@@ -19,7 +19,7 @@ public class UserCmd implements CommandExecutor {
             return true;
         }
 
-        Player p = (Player) sender;
+        final Player p = (Player) sender;
 
         if(label.equalsIgnoreCase("user")){
             if(args.length == 4){
@@ -34,7 +34,7 @@ public class UserCmd implements CommandExecutor {
                 }
             } else if(args.length == 2){
                 if(args[0].equalsIgnoreCase("stats")){
-                    main.getUserManager().showStats(args[1]);
+                    main.getUserManager().showStats(p, args[1]);
                 } else {
                     main.getUserManager().showHelp(p);
                     return true;

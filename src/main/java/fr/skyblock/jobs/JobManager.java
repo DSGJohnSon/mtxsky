@@ -4,6 +4,8 @@ import fr.skyblock.Main;
 import fr.skyblock.exceptions.JobAlreadyTakenException;
 import fr.skyblock.exceptions.NotEnoughMoneyException;
 import fr.skyblock.exceptions.ValParamException;
+import fr.skyblock.lang.Lang;
+import fr.skyblock.lang.LangValue;
 import fr.skyblock.users.User;
 import org.bukkit.entity.Player;
 
@@ -19,7 +21,7 @@ public class JobManager {
      * @param user utilisateur
      * @param job métier
      */
-    public static void changeJob(User user, IJob job){
+    public static void changeJob(User user, Job job){
         if(user == null || job == null){
             main.getLogger().warning(JobManager.class.getSimpleName() + " Param(s) null");
             throw new ValParamException(JobManager.class.getSimpleName() + " Param(s) null");
@@ -27,11 +29,11 @@ public class JobManager {
 
         Player p = user.getPlayer();
 
-        if(user.getJob().getEJob().equals(job.getEJob())){
+        if(user.getJob().equals(job)){
            throw new JobAlreadyTakenException();
         }
 
-        double price = getNewPrice(job.getEJob().getPrice(), user.getJobChangeTimes());
+        double price = getNewPrice(job.getPrice(), user.getJobChangeTimes());
 
         if(user.getMoney() < price){
             throw new NotEnoughMoneyException();
@@ -39,8 +41,8 @@ public class JobManager {
 
         user.removeMoney(price);
         user.changeJob(job);
-        p.sendMessage("Votre nouveau métier est désormais &f" + job.getEJob().getName().toLowerCase() + ".");
-        main.getLogger().info(p.getName() + " vient de changer de métier.");
+        p.sendMessage(Lang.getPrefix() + Lang.NEW_JOB.get()
+                .replace(LangValue.JOB.getName(), job.getName().toLowerCase()));
     }
 
     /**

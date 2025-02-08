@@ -35,7 +35,7 @@ public class ScoreboardManager {
 
         board.updateLines(
                 "",
-                "Métier : " + user.getJob().getEJob().getName(),
+                "Métier : " + user.getJob().getName(),
                 "Morts : " + user.getDeaths(),
                 "Argent : " + user.getMoney(),
                 ""

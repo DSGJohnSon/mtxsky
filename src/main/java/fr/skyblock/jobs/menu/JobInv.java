@@ -3,8 +3,9 @@ package fr.skyblock.jobs.menu;
 import fr.skyblock.Main;
 import fr.skyblock.exceptions.JobAlreadyTakenException;
 import fr.skyblock.exceptions.NotEnoughMoneyException;
-import fr.skyblock.jobs.EJob;
+import fr.skyblock.jobs.JobInfo;
 import fr.skyblock.jobs.JobManager;
+import fr.skyblock.jobs.types.Bucheron;
 import fr.skyblock.jobs.types.Mineur;
 import fr.skyblock.lang.Lang;
 import fr.skyblock.users.User;
@@ -40,8 +41,8 @@ public class JobInv implements Listener, CommandExecutor {
         if(main.getUserManager().getUser(p).isEmpty()) return;
         user = main.getUserManager().getUser(p).get();
 
-        price = JobManager.getNewPrice(EJob.MINEUR.getPrice(), user.getJobChangeTimes());
-        inv.setItem(4, EJob.MINEUR.getItem(price));
+        inv.setItem(3, JobInfo.MINEUR.getItem(JobManager.getNewPrice(JobInfo.MINEUR.getPrice(), user.getJobChangeTimes())));
+        inv.setItem(4, JobInfo.BUCHERON.getItem(JobManager.getNewPrice(JobInfo.BUCHERON.getPrice(), user.getJobChangeTimes())));
     }
 
     @Override
@@ -77,17 +78,18 @@ public class JobInv implements Listener, CommandExecutor {
         e.setCancelled(true);
         p.closeInventory();
 
-        if (current.getType() == EJob.MINEUR.getIcon().getType()){
-            try {
-                JobManager.changeJob(user, new Mineur(user));
-            } catch (NotEnoughMoneyException exception){
-                p.sendMessage(Lang.getErrorPrefix() + "&7 Tu n'as pas assez d'argent !");
-                main.getLogger().info(p.getName() + " a essayé de changer de métier mais n'a pas assez d'argent.");
-                exception.getSuppressed();
-            } catch (JobAlreadyTakenException exception){
-                p.sendMessage(Lang.getErrorPrefix() + "&7 Tu as déjà ce métier !");
-                exception.getSuppressed();
+        try{
+            if(current.getType() == JobInfo.MINEUR.getIcon().getType()){
+                JobManager.changeJob(user, new Mineur());
+            } else if (current.getType() == JobInfo.BUCHERON.getIcon().getType()) {
+                JobManager.changeJob(user, new Bucheron());
             }
+        } catch (NotEnoughMoneyException exception){
+            p.sendMessage(Lang.getErrorPrefix() + Lang.NOT_ENOUGH_MONEY.get());
+            exception.getSuppressed();
+        } catch (JobAlreadyTakenException exception){
+            p.sendMessage(Lang.getErrorPrefix() + Lang.JOB_ALREADY_TAKEN.get());
+            exception.getSuppressed();
         }
     }
 }

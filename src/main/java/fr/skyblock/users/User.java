@@ -3,8 +3,8 @@ package fr.skyblock.users;
 import fr.skyblock.Main;
 import fr.skyblock.exceptions.NotEnoughMoneyException;
 import fr.skyblock.exceptions.ValParamException;
+import fr.skyblock.jobs.Job;
 import fr.skyblock.jobs.types.Chomeur;
-import fr.skyblock.jobs.IJob;
 import fr.skyblock.jobs.types.Mineur;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class User {
     private int deaths;
     private double money;
     private int jobChangeTimes;
-    private IJob job;
+    private Job job;
 
     private final static Main main = Main.getInstance();
 
@@ -39,7 +39,7 @@ public class User {
         deaths = 0;
         money = 0;
         jobChangeTimes = 0;
-        job = new Chomeur(this);
+        job = new Chomeur();
     }
 
     /**
@@ -60,9 +60,9 @@ public class User {
 
     /**
      * Retourne le métier du joueur
-     * @return IJob métier
+     * @return Job métier
      */
-    public IJob getJob() {
+    public Job getJob() {
         return job;
     }
 
@@ -121,8 +121,8 @@ public class User {
      */
     public void setJob(String jobName) {
         switch (jobName){
-            case "chomeur" -> job = new Chomeur(this);
-            case "mineur" -> job = new Mineur(this);
+            case "chomeur" -> job = new Chomeur();
+            case "mineur" -> job = new Mineur();
             default -> throw new RuntimeException(getClass().getSimpleName() + " Métier non trouvé");
         }
     }
@@ -181,10 +181,10 @@ public class User {
 
     /**
      * Change le métier du joueur
-     * @param ijob métier
+     * @param newJob métier
      */
-    public void changeJob(IJob ijob) {
-        job = ijob;
+    public void changeJob(Job newJob) {
+        job = newJob;
         jobChangeTimes += 1;
     }
 }

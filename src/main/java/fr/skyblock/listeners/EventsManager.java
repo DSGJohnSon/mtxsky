@@ -29,6 +29,7 @@ public class EventsManager implements Listener {
     public void listenEvents(){
         pm.registerEvents(new JoinQuit(), pl);
         pm.registerEvents(new JobInv(), pl);
+        pm.registerEvents(new Death(), pl);
     }
 
 }

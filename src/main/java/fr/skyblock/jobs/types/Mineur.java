@@ -1,41 +1,40 @@
 package fr.skyblock.jobs.types;
 
-import fr.skyblock.Main;
-import fr.skyblock.exceptions.ValParamException;
-import fr.skyblock.jobs.EJob;
-import fr.skyblock.jobs.IJob;
-import fr.skyblock.users.User;
+import fr.skyblock.jobs.Job;
+import fr.skyblock.jobs.JobInfo;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Random;
 
 /**
  * Modélise le métier mineur
  */
-public class Mineur implements IJob {
+public class Mineur extends Job {
+    private final Random random = new Random();
 
-    private final User user;
-    private final EJob eJob;
+    public Mineur(){
+        super(JobInfo.MINEUR.getName(), JobInfo.MINEUR.getPrice(), JobInfo.MINEUR.getIcon());
+    }
 
-    private final static Main main = Main.getInstance();
-
-    /**
-     * Constructeur, renvoie une nouvelle instance de mineur
-     * @param u utilisateur
-     */
-    public Mineur(User u){
-        if(u == null){
-            main.getLogger().warning(getClass().getSimpleName() + " Param null");
-            throw new ValParamException(getClass().getSimpleName() + " Param null");
+    @Override
+    public void onBlockBreak(BlockBreakEvent e, Player p) {
+        if(e.getBlock().getType() == Material.COAL_ORE
+                || e.getBlock().getType() == Material.IRON_ORE
+                || e.getBlock().getType() == Material.DIAMOND_ORE
+                || e.getBlock().getType() == Material.GOLD_ORE){
+            if(random.nextDouble() < 0.1){
+                p.getInventory().addItem(new ItemStack(e.getBlock().getType(), 1));
+            }
         }
-        user = u;
-        eJob = EJob.MINEUR;
     }
 
     @Override
-    public void applyBonus() {
-        user.getPlayer().sendMessage("Bonus mineur appliqué !");
-    }
-
-    @Override
-    public EJob getEJob() {
-        return eJob;
+    public void applyPassiveEffects(Player p) {
+        p.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 9999, 1, false ,false));
     }
 }
