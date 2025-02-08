@@ -171,7 +171,7 @@ public class UserManager {
                     }
                     sender.sendMessage(Component.text(Lang.getPrefix() + Lang.CMD_USER_COINS.get()
                             .replace(LangValue.PLAYER.getName(), target)
-                            .replace(LangValue.COINS.getName(), Double.toString(user.getMoney())));
+                            .replace(LangValue.COINS.getName(), Double.toString(user.getMoney()))));
                 } catch (NumberFormatException e) {
                     throw new RuntimeException(e);
                 }
