@@ -11,6 +11,7 @@ public enum Lang {
     PREFIX,
     ERROR,
     PLAYER_JOIN,
+    PLAYER_QUIT,
     CMD_USER_HELP,
     CMD_USER_STATS,
     CMD_USER_DEATHS,

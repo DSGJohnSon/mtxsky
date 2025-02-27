@@ -51,5 +51,9 @@ public class JoinQuit implements Listener {
         if (board != null) {
             board.delete();
         }
+
+
+        e.quitMessage(Component.text(Lang.PLAYER_QUIT.get()
+                .replace(LangValue.PLAYER.getName(), p.getName())));
     }
 }

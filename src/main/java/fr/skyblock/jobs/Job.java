@@ -42,7 +42,7 @@ public abstract class Job implements IJob {
     public void onFishCatch(PlayerFishEvent e, Player p) {}
 
     @Override
-    public void applyPassiveEffects(Player p) {}
+    public void applyPassiveEffects(Player p, ItemStack previous, ItemStack current) {}
 
     @Override
     public boolean equals(Object o) {

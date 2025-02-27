@@ -3,7 +3,6 @@ package fr.skyblock.jobs.types;
 import fr.skyblock.Main;
 import fr.skyblock.jobs.Job;
 import fr.skyblock.jobs.JobInfo;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Modélise les chomeurs

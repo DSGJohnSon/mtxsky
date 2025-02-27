@@ -2,6 +2,7 @@ prefix: '&7[&fSky&bBlock&7]'
 error: '&7[&cErreur&7]'
 
 player-join: '&7[&a+&7]&f {player}'
+player-quit: '&7[&c-&7]&f {player}'
 
 cmd-user-help: |-
   &7--------- &bUser &7----------

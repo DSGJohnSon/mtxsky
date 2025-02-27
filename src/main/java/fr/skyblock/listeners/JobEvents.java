@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class JobEvents implements Listener {
 
@@ -45,6 +47,16 @@ public class JobEvents implements Listener {
         User user = main.getUserManager().getUser(p).get();
 
         user.getJob().onMobKill(e, p);
+    }
+
+    @EventHandler
+    public void onItemInHand(PlayerItemHeldEvent e){
+        Player p = e.getPlayer();
+
+        if(main.getUserManager().getUser(p).isEmpty()) return;
+        User user = main.getUserManager().getUser(p).get();
+
+        user.getJob().applyPassiveEffects(p, p.getInventory().getItem(e.getPreviousSlot()), p.getInventory().getItem(e.getNewSlot()));
     }
 
 }

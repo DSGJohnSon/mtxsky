@@ -29,6 +29,6 @@ public interface IJob {
     /**
      * Bonus passifs (sans event)
      */
-    void applyPassiveEffects(Player p);
+    void applyPassiveEffects(Player p, ItemStack previous, ItemStack current);
 
 }
