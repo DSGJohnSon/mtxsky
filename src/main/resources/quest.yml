@@ -1,0 +1,6 @@
+currentQuestIndex: 0
+quests:
+  0:
+    name:
+    desc:
+    progress:

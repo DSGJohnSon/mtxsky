@@ -31,6 +31,7 @@ public class EventsManager implements Listener {
         pm.registerEvents(new JobInv(), pl);
         pm.registerEvents(new Death(), pl);
         pm.registerEvents(new JobEvents(), pl);
+        pm.registerEvents(new QuestEvents(), pl);
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 public enum SkyFile {
 
     LANG("lang.yml"),
+    QUEST("quest.yml"),
     USER("user.yml");
 
     private final String fileName;

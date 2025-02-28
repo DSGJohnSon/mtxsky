@@ -3,6 +3,8 @@ package fr.skyblock;
 import fr.skyblock.files.SkyFile;
 import fr.skyblock.jobs.menu.JobInv;
 import fr.skyblock.listeners.EventsManager;
+import fr.skyblock.quests.QuestCmd;
+import fr.skyblock.quests.QuestManager;
 import fr.skyblock.scoreboard.SboreboardRunnable;
 import fr.skyblock.scoreboard.ScoreboardManager;
 import fr.skyblock.users.UserCmd;
@@ -17,10 +19,11 @@ public class Main extends JavaPlugin {
     private UserManager userManager;
     private ScoreboardManager sbManager;
     private UsersFile usersFile;
+    private QuestManager questManager;
 
     @Override
     public void onEnable() {
-        getLogger().info("------------------------------------------");
+        getLogger().info("---------------------------------------");
         getLogger().info("Initialisation du plugin en cours ...");
 
         instance = this;
@@ -32,9 +35,13 @@ public class Main extends JavaPlugin {
         SkyFile user = SkyFile.USER;
         user.create(getLogger());
 
+        SkyFile quest = SkyFile.QUEST;
+        quest.create(getLogger());
+
         userManager = new UserManager();
         sbManager = new ScoreboardManager();
         usersFile = new UsersFile();
+        questManager = new QuestManager();
 
         //Ecoute des événements
         new EventsManager(this).listenEvents();
@@ -42,6 +49,7 @@ public class Main extends JavaPlugin {
         // Enregistrement des commandes
         getCommand("job").setExecutor(new JobInv());
         getCommand("user").setExecutor(new UserCmd());
+        getCommand("quest").setExecutor(new QuestCmd());
 
         //Threads
         new SboreboardRunnable().runTaskTimer(this, 0, 20);
@@ -73,6 +81,9 @@ public class Main extends JavaPlugin {
         return sbManager;
     }
 
+    public QuestManager getQuestManager() {
+        return questManager;
+    }
 }
 
 
